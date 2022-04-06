@@ -37,6 +37,6 @@ void MainWindow::onEditClicked()
 
     my_model_.edit({2, 22222, 2222.222, "myobject22222"});
 
-    update(); /// seems to be doing nothing.
+//    ui->tableView->update(); /// seems to be doing nothing.
 }
 
