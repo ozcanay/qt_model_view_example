@@ -38,23 +38,6 @@ QVariant MyModel::data(const QModelIndex &index, int role) const {
    return {};
 }
 
-bool MyModel::setData(const QModelIndex &index, const QVariant &value, int role)
-{
-    qDebug() << __PRETTY_FUNCTION__ << ", row: " << index.row() << ", column:" << index.column();
-
-    if (role == Qt::EditRole) {
-        if (!checkIndex(index))
-            return false;
-
-        my_objects_[index.row()] = qvariant_cast<MyObject>(value);
-        emit dataChanged(index, index);
-
-        return true;
-    }
-
-    return false;
-}
-
 QVariant MyModel::headerData(int section, Qt::Orientation orientation, int role) const {
    if (orientation != Qt::Horizontal || role != Qt::DisplayRole) {
        return {};
@@ -80,10 +63,11 @@ void MyModel::edit(const MyObject& my_object) {
     const auto id = my_object.id;
     for(auto i = 0u; i < my_objects_.size(); ++i) {
         if(my_objects_[i].id == id) {
-            const auto var = QVariant::fromValue(my_object);
-            setData(index(i, 1), var);
-            setData(index(i, 2), var);
-            setData(index(i, 3), var);
+            my_objects_[i].a = my_object.a;
+            my_objects_[i].b = my_object.b;
+            my_objects_[i].c = my_object.c;
+
+            emit dataChanged(index(i, 1), index(i, 3));
             break;
         }
     }
